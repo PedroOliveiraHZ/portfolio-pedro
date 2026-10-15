@@ -156,6 +156,8 @@ body::before{content:"";position:fixed;top:-20vh;right:0;width:60vw;height:70vh;
 .card .ba{font-size:15px}
 .card .tags{margin-top:auto;padding-top:4px}
 .card.out{display:none}
+.live{justify-self:start;font:600 14px var(--f-body);color:var(--accent);text-decoration:none}
+.live:hover{text-decoration:underline}
 .note{margin-top:18px;font-size:14px;color:var(--faint)}
 
 /* tecnologias */

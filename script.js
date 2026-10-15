@@ -5,9 +5,9 @@ const IMG = f => `${BASE}assets/img/${f}.webp`;
 
 const T = {
   pt:{before:'Antes',now:'Agora',screens:'telas',caseBtn:'Estudo de caso',seeAll:n=>`Ver as ${n} telas`,highlights:'Destaques',stack:'Stack',of:'de',
-      open:'Abrir',seeScreens:'Ver telas do',copied:'E-mail copiado',copy:'Copiar e-mail',selected:'Selecionado, use Ctrl+C',role:'Desenvolvedor Full-stack'},
+      open:'Abrir',seeScreens:'Ver telas do',copied:'E-mail copiado',copy:'Copiar e-mail',selected:'Selecionado, use Ctrl+C',role:'Desenvolvedor Full-stack',visit:'Ver site'},
   en:{before:'Before',now:'Now',screens:'screens',caseBtn:'Case study',seeAll:n=>`See all ${n} screens`,highlights:'Highlights',stack:'Stack',of:'of',
-      open:'Open',seeScreens:'See screens of',copied:'Email copied',copy:'Copy email',selected:'Selected, press Ctrl+C',role:'Full-stack Developer'}
+      open:'Open',seeScreens:'See screens of',copied:'Email copied',copy:'Copy email',selected:'Selected, press Ctrl+C',role:'Full-stack Developer',visit:'Visit site'}
 }[LANG];
 
 const P = [
@@ -34,6 +34,14 @@ const P = [
   hl:['Leitura do Drive de todo o time','Parsing sem custo de LLM','Painel ao vivo do Pipedrive','Deduplicação de reuniões'],
   points:['Service account com domain-wide delegation: lê o Drive do time sem autorização individual','Parsing com regex, sem custo de LLM','Sem banco próprio: o painel lê o Pipedrive ao vivo','Deduplicação para não registrar a mesma reunião duas vezes'],
   tags:['Next.js','TypeScript','Google Drive API','Pipedrive API','Vercel Cron'],imgs:[['bussola','Painel de clientes']]},
+
+ {id:'hlinho',group:'sites',kind:'Site de loja · JavaScript',title:"H'Linho",link:'https://hlinho.vercel.app/',
+  before:'Pedidos da loja só pelo direct do Instagram, sem catálogo',
+  after:'Catálogo com sacola que envia a reserva pronta pro WhatsApp',
+  desc:"Site da H'Linho, loja de roupas de linho que vende na Feira da Madrugada, em Fortaleza. A cliente monta a sacola, informa quem vai retirar e envia a reserva pelo WhatsApp.",
+  points:['Coleção com filtro por categoria: shorts, vestidos, macaquinhos e conjuntos','Sacola com subtotal e formulário de retirada (nome, outra pessoa retira, horário)','Reserva enviada pronta pro WhatsApp da loja, sem pagamento online','Layout responsivo com barra de sacola fixa no celular'],
+  tags:['HTML','CSS','JavaScript','WhatsApp','Vercel'],
+  imgs:[['hlinho-home','Página inicial'],['hlinho-colecao','Coleção com filtros'],['hlinho-sacola','Sacola e reserva']]},
 
  {id:'anuncioia',group:'vendas',fit:true,kind:'Node · Gemini',title:'anuncioia',
   before:'Revisão de anúncio feita item por item pelo consultor',
@@ -108,6 +116,12 @@ const EN = {
   hl:['Reads the whole team\'s Drive','Parsing with no LLM cost','Live Pipedrive dashboard','Meeting deduplication'],
   points:['Service account with domain-wide delegation: reads the team\'s Drive without individual authorization','Regex parsing, no LLM cost','No database of its own: the dashboard reads Pipedrive live','Deduplication so the same meeting is never logged twice'],
   caps:['Client dashboard']},
+ hlinho:{kind:'Store website · JavaScript',
+  before:'Orders only through Instagram DMs, with no catalog',
+  after:'Catalog with a bag that sends a ready-made reservation to WhatsApp',
+  desc:"Website for H'Linho, a linen clothing store that sells at Fortaleza's Feira da Madrugada market. Customers fill a bag, say who will pick it up and send the reservation through WhatsApp.",
+  points:['Collection filtered by category: shorts, dresses, rompers and sets','Bag with subtotal and pickup form (name, someone else picking up, time)','Reservation sent ready to the store\'s WhatsApp, no online payment','Responsive layout with a sticky bag bar on mobile'],
+  caps:['Home page','Collection with filters','Bag and reservation']},
  anuncioia:{before:'Listing reviews done item by item by a consultant',
   after:'0–100 score and diagnosis with one click on the listing',
   desc:'Analyzes the title, description, images and specs of a Mercado Livre listing and returns a score, strengths and improvement points.',
@@ -224,6 +238,7 @@ P.filter(p => p.group !== 'case').forEach(p => {
       <div><span class="mono">${p.kind}</span><h4>${p.title}</h4></div>
       ${ba(p)}
       ${tags(p.tags)}
+      ${p.link ? `<a class="live" href="${p.link}" target="_blank" rel="noopener">${T.visit} ↗</a>` : ''}
     </div>`;
   others.appendChild(el);
 });
@@ -260,7 +275,7 @@ function openP(id, i) {
   cur = P.find(p => p.id === id); if (!cur) return;
   info.innerHTML = `<span class="mono">${cur.kind}</span><h2 id="m-title">${cur.title}</h2>${ba(cur)}<p>${cur.desc}</p>
     <h4>${T.highlights}</h4><ul class="pts">${cur.points.map(x => `<li>${x}</li>`).join('')}</ul>
-    <h4>${T.stack}</h4>${tags(cur.tags)}`;
+    <h4>${T.stack}</h4>${tags(cur.tags)}${cur.link ? `<a class="btn primary sm" href="${cur.link}" target="_blank" rel="noopener" style="justify-self:start">${T.visit} ↗</a>` : ''}`;
   th.innerHTML = cur.imgs.map(([f, c]) => `<button aria-label="${esc(c)}"><img src="${IMG(f)}" alt="" loading="lazy"></button>`).join('');
   [...th.children].forEach((b, j) => b.onclick = () => show(j));
   show(i || 0);
