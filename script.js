@@ -35,13 +35,22 @@ const P = [
   points:['Service account com domain-wide delegation: lê o Drive do time sem autorização individual','Parsing com regex, sem custo de LLM','Sem banco próprio: o painel lê o Pipedrive ao vivo','Deduplicação para não registrar a mesma reunião duas vezes'],
   tags:['Next.js','TypeScript','Google Drive API','Pipedrive API','Vercel Cron'],imgs:[['bussola','Painel de clientes']]},
 
- {id:'hlinho',group:'sites',kind:'Site de loja · JavaScript',title:"H'Linho",link:'https://hlinho.vercel.app/',
+ {id:'hlinho',group:'sites',kind:'Site de loja · JavaScript',title:"H'Linho",
   before:'Pedidos da loja só pelo direct do Instagram, sem catálogo',
   after:'Catálogo com sacola que envia a reserva pronta pro WhatsApp',
   desc:"Site da H'Linho, loja de roupas de linho que vende na Feira da Madrugada, em Fortaleza. A cliente monta a sacola, informa quem vai retirar e envia a reserva pelo WhatsApp.",
   points:['Coleção com filtro por categoria: shorts, vestidos, macaquinhos e conjuntos','Sacola com subtotal e formulário de retirada (nome, outra pessoa retira, horário)','Reserva enviada pronta pro WhatsApp da loja, sem pagamento online','Layout responsivo com barra de sacola fixa no celular'],
   tags:['HTML','CSS','JavaScript','WhatsApp','Vercel'],
   imgs:[['hlinho-home','Página inicial'],['hlinho-colecao','Coleção com filtros'],['hlinho-sacola','Sacola e reserva']]},
+
+ {id:'turatti',group:'case',kind:'Dashboard de BI · API IzzyWay',title:'Turatti Intelligence',when:'2026',
+  before:'Números do restaurante espalhados no PDV e em relatórios exportados',
+  after:'Faturamento, CMV, produtos e caixa de 3 unidades num painel ao vivo',
+  desc:'Dashboard de BI para o grupo Turatti, que consome a API BI da IzzyWay (PDV) de cada estabelecimento. O dono acompanha faturamento, vendas, caixa, equipe, produtos, CMV, financeiro, estoque e compras com filtro por unidade e por mês.',
+  hl:['3 estabelecimentos, filtro por unidade e mês','Mais e menos vendidos','CMV teórico x compras de insumos','10 telas de análise'],
+  points:['Consome a API BI da IzzyWay com token por estabelecimento','KPIs de faturamento, vendas, ticket médio e margem bruta, com comparação ao período anterior','Faturamento por semana e participação por categoria','Ranking de mais e menos vendidos com quantidade e receita','CMV teórico pela ficha técnica comparado às compras de insumos, com alerta de desperdício','Itens com menor margem e itens sem custo cadastrado','Telas de caixa, equipe, financeiro, estoque, compras e movimentações'],
+  tags:['JavaScript','API REST','IzzyWay','Vercel'],
+  imgs:[['turatti-visao','Visão geral'],['turatti-produtos','Produtos: mais e menos vendidos'],['turatti-cmv','CMV e custos']]},
 
  {id:'anuncioia',group:'vendas',fit:true,kind:'Node · Gemini',title:'anuncioia',
   before:'Revisão de anúncio feita item por item pelo consultor',
@@ -122,6 +131,13 @@ const EN = {
   desc:"Website for H'Linho, a linen clothing store that sells at Fortaleza's Feira da Madrugada market. Customers fill a bag, say who will pick it up and send the reservation through WhatsApp.",
   points:['Collection filtered by category: shorts, dresses, rompers and sets','Bag with subtotal and pickup form (name, someone else picking up, time)','Reservation sent ready to the store\'s WhatsApp, no online payment','Responsive layout with a sticky bag bar on mobile'],
   caps:['Home page','Collection with filters','Bag and reservation']},
+ turatti:{kind:'BI dashboard · IzzyWay API',
+  before:'Restaurant numbers scattered across the POS and exported reports',
+  after:'Revenue, COGS, products and cash for 3 locations in one live dashboard',
+  desc:'BI dashboard for the Turatti restaurant group, consuming the IzzyWay (POS) BI API for each location. The owner tracks revenue, sales, cash, staff, products, COGS, finance, stock and purchases, filtered by location and month.',
+  hl:['3 locations, filter by location and month','Best and worst sellers','Theoretical COGS vs. supply purchases','10 analysis screens'],
+  points:['Consumes the IzzyWay BI API with a token per location','KPIs for revenue, sales, average ticket and gross margin, compared with the previous period','Weekly revenue and share by category','Best and worst sellers ranked by quantity and revenue','Theoretical COGS from recipes compared with supply purchases, flagging waste','Lowest-margin items and items with no cost registered','Cash, staff, finance, stock, purchases and transactions screens'],
+  caps:['Overview','Products: best and worst sellers','COGS and costs']},
  anuncioia:{before:'Listing reviews done item by item by a consultant',
   after:'0–100 score and diagnosis with one click on the listing',
   desc:'Analyzes the title, description, images and specs of a Mercado Livre listing and returns a score, strengths and improvement points.',
@@ -218,6 +234,7 @@ P.filter(p => p.group === 'case').forEach(p => {
       <div class="factions">
         <button class="btn primary sm" data-open="${p.id}">${T.caseBtn}</button>
         ${p.imgs.length > 1 ? `<button class="btn sm" data-open="${p.id}" data-i="1">${T.seeAll(p.imgs.length)}</button>` : ''}
+        ${p.link ? `<a class="btn sm" href="${p.link}" target="_blank" rel="noopener">${T.visit} ↗</a>` : ''}
       </div>
     </div>`;
   feat.appendChild(el);
