@@ -4,9 +4,9 @@ const BASE = LANG === 'en' ? '../' : '';
 const IMG = f => `${BASE}assets/img/${f}.webp`;
 
 const T = {
-  pt:{before:'Antes',now:'Agora',screens:'telas',caseBtn:'Estudo de caso',seeAll:n=>`Ver as ${n} telas`,highlights:'Destaques',stack:'Stack',of:'de',
+  pt:{before:'Antes',now:'Agora',screens:'telas',caseBtn:'Estudo de caso',seeAll:n=>`Ver as ${n} telas`,highlights:'Destaques',stack:'Stack',of:'de',zoomHint:'Clique na imagem para ampliar',zoomFit:'Ajustar à tela',zoomFull:'Tamanho real',zoomClose:'Fechar',
       open:'Abrir',seeScreens:'Ver telas do',copied:'E-mail copiado',copy:'Copiar e-mail',selected:'Selecionado, use Ctrl+C',role:'Desenvolvedor Full-stack',visit:'Ver site'},
-  en:{before:'Before',now:'Now',screens:'screens',caseBtn:'Case study',seeAll:n=>`See all ${n} screens`,highlights:'Highlights',stack:'Stack',of:'of',
+  en:{before:'Before',now:'Now',screens:'screens',caseBtn:'Case study',seeAll:n=>`See all ${n} screens`,highlights:'Highlights',stack:'Stack',of:'of',zoomHint:'Click the image to zoom',zoomFit:'Fit to screen',zoomFull:'Actual size',zoomClose:'Close',
       open:'Open',seeScreens:'See screens of',copied:'Email copied',copy:'Copy email',selected:'Selected, press Ctrl+C',role:'Full-stack Developer',visit:'Visit site'}
 }[LANG];
 
@@ -27,7 +27,7 @@ const P = [
   points:['Dashboard com termômetro de vagas, turnover por mês, região e nível','Cadastro de colaboradores com filtros e exportação CSV','Turnover com rotatividade mensal, tempo de casa e motivos de desligamento','PDI, advertências, faltas e atestados','Nine Box e perfil comportamental em radar','Férias, aniversários, marcos de empresa e banco de talentos','Blacklist migrada de Apps Script, que engolia erros, para Postgres'],
   tags:['Node/Express','PostgreSQL','Vanilla JS','Railway','Vercel'],
   imgs:[['rh-dashboard','Dashboard'],['rh-turnover','Turnover'],['rh-ninebox','Nine Box'],['rh-colaboradores','Colaboradores'],['rh-evolucao','Evolução mensal e motivos de desligamento'],['rh-pdi','PDI e advertências'],['rh-perfil','Perfil comportamental'],['rh-ferias','Controle de férias'],['rh-aniversarios','Aniversários'],['rh-aniv-empresa','Aniversário de empresa'],['rh-talentos','Banco de talentos']]},
- {id:'bussola',group:'case',kind:'Next.js · Pipedrive · Google Drive',title:'Bússola de Clientes',when:'2026',
+ {id:'bussola',group:'vendas',kind:'Next.js · Pipedrive · Google Drive',title:'Bússola de Clientes',when:'2026',
   before:'Vendedor atualizava o Pipedrive à mão depois de cada reunião',
   after:'A nota do Gemini vira atividade no Pipedrive sozinha',
   desc:'Lê as anotações do Gemini no Google Drive de cada vendedor, extrai os próximos passos e registra nota e follow-up no Pipedrive. O painel mostra o próximo passo de cada cliente, com atrasos em destaque.',
@@ -315,11 +315,35 @@ function openP(id, i) {
   try { dlg.showModal(); } catch (e) { dlg.setAttribute('open', ''); }
 }
 document.addEventListener('click', e => { const b = e.target.closest('[data-open]'); if (b) openP(b.dataset.open, +(b.dataset.i || 0)); });
+
+// Zoom em tela cheia
+const zm = document.createElement('div');
+zm.className = 'zoom';
+zm.innerHTML = `<div class="zoom-bar"><button type="button" id="z-toggle">${T.zoomFull}</button><button type="button" id="z-close">${T.zoomClose} ×</button></div><img alt="">`;
+dlg.appendChild(zm);
+const zImg = zm.querySelector('img'), zToggle = zm.querySelector('#z-toggle');
+const hint = document.createElement('span'); hint.className = 'zoom-hint'; hint.textContent = T.zoomHint;
+img.parentElement.appendChild(hint);
+function openZoom() {
+  zImg.src = img.src; zImg.alt = img.alt;
+  const set = () => zm.style.setProperty('--nw', (zImg.naturalWidth || 1600) + 'px');
+  zImg.complete ? set() : (zImg.onload = set);
+  zm.classList.remove('full'); zToggle.textContent = T.zoomFull;
+  zm.classList.add('open'); zm.scrollTop = 0;
+}
+const closeZoom = () => zm.classList.remove('open');
+img.addEventListener('click', openZoom);
+zToggle.addEventListener('click', e => { e.stopPropagation(); const f = zm.classList.toggle('full'); zToggle.textContent = f ? T.zoomFit : T.zoomFull; });
+zm.querySelector('#z-close').addEventListener('click', e => { e.stopPropagation(); closeZoom(); });
+zImg.addEventListener('click', e => { e.stopPropagation(); const f = zm.classList.toggle('full'); zToggle.textContent = f ? T.zoomFit : T.zoomFull; });
+zm.addEventListener('click', closeZoom);
+dlg.addEventListener('keydown', e => { if (e.key === 'Escape' && zm.classList.contains('open')) { e.preventDefault(); closeZoom(); } }, true);
+dlg.addEventListener('close', closeZoom);
 document.getElementById('m-prev').onclick = () => show(idx - 1);
 document.getElementById('m-next').onclick = () => show(idx + 1);
 document.getElementById('m-close').onclick = () => dlg.close();
 dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
-dlg.addEventListener('keydown', e => { if (!cur) return; if (e.key === 'ArrowRight') show(idx + 1); if (e.key === 'ArrowLeft') show(idx - 1); });
+dlg.addEventListener('keydown', e => { if (!cur || zm.classList.contains('open')) return; if (e.key === 'ArrowRight') show(idx + 1); if (e.key === 'ArrowLeft') show(idx - 1); });
 
 // Copiar e-mail
 document.getElementById('copy-mail').addEventListener('click', e => {
