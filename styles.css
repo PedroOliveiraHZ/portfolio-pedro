@@ -268,3 +268,22 @@ dialog::backdrop{background:rgba(6,4,6,.78);backdrop-filter:blur(4px)}
   .sec{padding-top:72px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ---------- 3D ---------- */
+main{position:relative}
+.hero-bg{position:absolute;top:-68px;left:0;right:0;height:calc(100vh + 68px);max-height:980px;pointer-events:none;z-index:0;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 18%,#000 62%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 18%,#000 62%,transparent 100%)}
+.hero-bg canvas{display:block;width:100%;height:100%}
+.hero,main > section{position:relative;z-index:1}
+.tilt{transform-style:preserve-3d;will-change:transform}
+.tilt.tilting{transition:transform .12s ease-out!important;transform:perspective(1000px) rotateX(var(--rx,0)) rotateY(var(--ry,0))}
+.card.tilt.tilting{transform:perspective(900px) rotateX(var(--rx,0)) rotateY(var(--ry,0)) translateY(-3px)}
+.card,.fcard{position:relative}
+.glare{position:absolute;inset:0;z-index:4;pointer-events:none;border-radius:inherit;opacity:0;transition:opacity .35s;
+  background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.14),transparent 55%)}
+:root[data-theme="light"] .glare{background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.45),transparent 55%)}
+.tilt.tilting .glare{opacity:1}
+.portrait .glare{border-radius:var(--r);bottom:auto;aspect-ratio:481/610;height:auto}
+.portrait.tilt img{transform:translateZ(30px)}
+.portrait.tilt::before{transform:translateZ(-10px)}
+@media (prefers-reduced-motion:reduce){.hero-bg{display:none}}
